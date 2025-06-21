@@ -1,5 +1,7 @@
-const modelCliente = require('../models/cliente.model')
+// Importamos el modelo en el cual se van a basar los controladores
+const modelCliente = require('../models/clientes.model')
 
+// Definimos las funciones asíncronas y las exportamos
 exports.listarClientes = async(req,res)=>{
     let listaCliente = await modelCliente.find();
     if(listaCliente)
@@ -8,7 +10,7 @@ exports.listarClientes = async(req,res)=>{
         res.status(404).json({error:'No se encontraron productos'})
 };
 
-exports.listarClienteEspecifico = async(req,res)=>{
+exports.listarClientePorId = async(req,res)=>{
     let listaCliente = await modelCliente.findOne({_id:req.params.id});
     if(listaCliente)
         res.status(200).json(listaCliente);
@@ -28,7 +30,7 @@ exports.nuevoCliente = async (req, res) => {
     if(insertarCliente)
         res.status(200).json({Mensaje: "Registro exitoso"})
     else
-        res.status(400),json({Mensaje: "Se presentó un error"})
+        res.status(404).json({Mensaje: "Se presentó un error"})
 };
 
 exports.editarCliente = async (req, res) => {
@@ -43,28 +45,6 @@ exports.editarCliente = async (req, res) => {
         res.status(200).json({ "mensaje": "actualización exitosa" });
     else
         res.status(404).json({ "mensaje": "Se presentó un error" });
-};
-
-exports.editarCampoCliente = async (req, res) => {
-    const campos = {};
-    if (req.body.doc) campos.documento = req.body.doc;
-    if (req.body.nc) campos.nombreCompleto = req.body.nc;
-    if (req.body.fn) campos.fNacimiento = req.body.fn;
-
-    try {
-        let actualizacion = await modelCliente.updateOne(
-            {_id: req.params.id},
-            {$set: campos},
-            {new: true}
-        )
-        if (actualizacion)
-            res.status(200).json({ "mensaje": "actualización exitosa" });
-        else
-            res.status(404).json({ "mensaje": "Se presentó un error" });
-
-    } catch {
-        res.status(500).json({ "Mensaje": "Se presentó un error"})
-    }
 };
 
 exports.eliminarCliente = async (req, res) => {

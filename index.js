@@ -9,8 +9,10 @@ app.use(logger('dev'));
 app.use(exp.urlencoded({extended: false}));
 app.use(exp.json())
 
-app.use('/v1', enrutador);
+app.use('/v2', enrutador);
 
-app.listen(process.env.PORT,( )=>{
-    console.log('servidor en linea')
+const PORT = process.env.PORT || 8300;
+
+app.listen(PORT,()=> {
+    console.log(`Servidor escuchando en el puerto ${PORT}...`)
 });
